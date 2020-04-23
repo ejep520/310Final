@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include "binaryFile.h"
 
 using namespace std;
 
