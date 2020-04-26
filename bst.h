@@ -1,3 +1,4 @@
+/*
 #ifndef __BST_H__
 #define __BST_H__
 #include "binaryFile.h"
@@ -42,3 +43,45 @@ class bst
 };
 
 #endif
+
+*/
+
+#ifndef _BST_H_
+#define	_BST_H_
+
+#include "bstNode.h"
+
+// Binary Search Tree for "double" data
+class bst {
+  private:
+    bstNode* root;
+
+    // Internally used by corresponding public function 
+    // So, these are private
+    bstNode* insert(double data, bstNode* r);
+    bstNode* remove(double data, bstNode* r);
+    void inOrder(bstNode* r, void (*visit)(double));
+    bool search(bstNode* r, double data);
+    int getNodeCount(bstNode* r);
+    int getHeight(bstNode* r);
+    void deleteTree(bstNode* r);
+    bstNode*	findSuccessor(bstNode*);
+
+  public:
+    bst();
+    virtual ~bst();
+
+    // Member functions used by client program 
+    // Check the difference between public and corresponding private function call in terms of their signatures
+    void insert(double data) { root = insert(data, root); }
+    void remove(double data) { root = remove(data, root); }
+    bool search(double data) { return search(root, data); }
+    
+    // Tree Traversal
+    void inOrder( void (*visit)(double) ) { inOrder(root, visit); }
+
+    int getNodeCount() { return getNodeCount(root); }
+    int getHeight() { return getHeight(root); }
+};
+
+#endif	/* _BST_H_ */
