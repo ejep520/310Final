@@ -81,15 +81,12 @@ void binaryFile::sort()
     departments = new bst[dept_count];
     for (int counter = 0; counter < record_count; counter++)
     {
-        if (!departments[Employees_in[counter].dept].insert(Employees_in[counter]))
-        {
-            throw new myException("Problem inserting a node into a bst.", ERROR);
-        }
+        // departments[Employees_in[counter].dept];
     }
     out_data.open(filename, out_data.binary|out_data.trunc);
     for (int counter = 0; counter < dept_count; counter++)
     {
-        out_data.write((char*)departments[counter].bin_out_tree(), dept_headcount[counter]*sizeof(EMP_REC));
+        // out_data.write((char*)departments[counter].bin_out_tree(), dept_headcount[counter]*sizeof(EMP_REC));
     }
     out_data.close();
     delete [] Employees_in;
@@ -116,7 +113,7 @@ bool binaryFile::searchBinary(int dept, int emp_num)
         return return_value;
     if (dept >= dept_count)
         return return_value;
-    return_value = departments[dept].search(emp_num);
+    //return_value = departments[dept].search(emp_num); // Awaiting a pull that mods bst.h and makes this correct.
     return return_value;
 }
 
@@ -126,6 +123,23 @@ EMP_REC *binaryFile::retrieveEmployee(int dept, int emp_num)
     {
         return nullptr;
     }
-    EMP_REC *return_val = p_retrieve_employee(dept, emp_num);
+    int offset = p_retrieve_employee(dept, emp_num);
+    if (in_data.is_open())
+        in_data.close();
+    in_data.open(filename, in_data.binary);
+    if (in_data.rdstate() != in_data.goodbit)
+    {
+        throw new myException("Unable to open binary file for reading.", ERROR);
+    }
+    in_data.seekg(offset*sizeof(EMP_REC), in_data.beg);
+    int deptNo, empNo;
+    char inName[30];
+    in_data>>deptNo>>empNo>>inName;
+    in_data.close();
+    EMP_REC *return_val = new EMP_REC{
+        .dept = deptNo,
+        .enumber = empNo,
+        .name = *inName
+    };
     return return_val;
 }
