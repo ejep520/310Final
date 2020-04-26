@@ -4,9 +4,10 @@
 // A Node class for Binary Search Tree for "int" data
 class bstNode {
   private:
+    
     bstNode* right; // pointer to right child
     bstNode* left; // pointer to left child
-    double data;
+    int data;
   public:
     bstNode(int data);
     virtual ~bstNode();

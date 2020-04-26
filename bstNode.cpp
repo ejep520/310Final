@@ -9,4 +9,5 @@ bstNode::bstNode(int data) {
 }
 
 bstNode::~bstNode() {
+    
 }
