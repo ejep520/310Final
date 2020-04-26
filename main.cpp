@@ -7,18 +7,9 @@ using namespace std;
 void bad_end(void);
 string get_fn(int);
 
-struct e_rec
-{
-    short dept;
-    int enumber;
-    char name[20];
-};
-
 int main(int argc, char * argv[])
 {
     ifstream in_data;
-    ofstream out_data;
-    const string out_fn = "output.bin";
     string in_fn = "";
     string this_line = "";
     char temp_char = 0;
@@ -47,20 +38,19 @@ int main(int argc, char * argv[])
     }
     in_data.clear();
     in_data.seekg(0, in_data.beg);
-    e_rec *Employees = new e_rec[linecount];
-    out_data.open(out_fn, out_data.binary|out_data.trunc);
+    EMP_REC *Employees = new EMP_REC[linecount];
     for (this_int = 0; this_int < linecount; this_int++)
     {
-        Employees[this_int] = e_rec();
+        Employees[this_int] = EMP_REC();
         in_data >> Employees[this_int].dept;
         in_data >> temp_char;
         in_data >> Employees[this_int].enumber;
         in_data >> temp_char;
         in_data >> Employees[this_int].name;
-        out_data.write((char*)&Employees[this_int], sizeof(e_rec));
     }
     in_data.close();
-    out_data.close();
+    binaryFile this_binary = binaryFile(Employees, linecount);
+    this_binary.sort();
     delete [] Employees;
     return 0;
 }
