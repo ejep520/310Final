@@ -1,19 +1,3 @@
-/*
-#include "bst.h"
-
-using namespace std;
-
-bst::bst()
-{
-
-}
-
-bst::~bst()
-{
-    
-}
-*/
-
 #include <iostream>
 #include <cstdlib>
 #include <new>
@@ -44,7 +28,7 @@ void bst::deleteTree(bstNode* rt) {
 }
 
 //Note: the return type is the node pointer
-bstNode* bst::insert(double data, bstNode* rt) {
+bstNode* bst::insert(int data, bstNode* rt) {
   try {
     if (rt == NULL) {
       rt = new bstNode(data);
@@ -65,7 +49,7 @@ bstNode* bst::insert(double data, bstNode* rt) {
 }
 
 //Note: the return type is the node pointer
-bstNode* bst::remove(double data, bstNode* rt) {
+bstNode* bst::remove(int data, bstNode* rt) {
   if (rt == NULL)
     return rt; // data not found. Do nothing.
   if (data < rt->data)
@@ -108,7 +92,7 @@ bstNode* bst::remove(double data, bstNode* rt) {
   return rt;
 }
 
-void bst::inOrder(bstNode* rt, void (*visit)(double)) {
+void bst::inOrder(bstNode* rt, void (*visit)(int)) {
   if (rt != 0) {
     inOrder(rt->left, visit);
     (*visit)(rt->data);
@@ -117,7 +101,7 @@ void bst::inOrder(bstNode* rt, void (*visit)(double)) {
 }
 
 // private: search data in the BST with rt as root
-bool bst::search(bstNode* rt, double data) {
+bool bst::search(bstNode* rt, int data) {
   if (rt == NULL) return false;
   else if (rt->data == data) return true;
   else if (data < rt->data)
@@ -126,11 +110,14 @@ bool bst::search(bstNode* rt, double data) {
     return search(rt->right, data);
 }
 
+/**********************NOT NEEDED*************************
 int bst::getNodeCount(bstNode* rt) {
   if (rt == 0) return 0;
   return getNodeCount(rt->left) + getNodeCount(rt->right) + 1;
 }
+*/
 
+/**********************NOT NEEDED*************************
 int bst::getHeight(bstNode* rt) {
   if (rt == NULL) return 0;
   else if (rt->left == NULL && rt->right == NULL) return 1;
@@ -140,6 +127,7 @@ int bst::getHeight(bstNode* rt) {
     return rh > lh ? rh+1 : lh+1;
   }
 }
+*/
 
 //findSuccessor is written as a recursive function to practice recursion
 //You can change this function with a loop, making it iterative
