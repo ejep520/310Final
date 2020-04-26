@@ -1,4 +1,4 @@
-excBinaryFile: main.o binaryFile.o bst.o
+excBinaryFile: main.o binaryFile.o bst.o bstNode.o
     g++ $@ $^
 
 .PHONY: clean
@@ -9,3 +9,4 @@ clean:
     @if [ -a main.o ]; then rm -v main.o; fi
     @if [ -a binaryFile.o ]; then rm -v binaryFile.o; fi
     @if [ -a bst.o ]; then rm -v bst.o; fi
+    @if [ -a bstNode.o ]; then rm -v bstNode.o; fi
