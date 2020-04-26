@@ -3,7 +3,7 @@
 /************************* PUBLIC: CONSTRUCTOR*************************/
 binaryFile::binaryFile()
 {
-    out_data.open(out_fn, out_data.binary | out_data.trunc);
+    out_data.open(filename, out_data.binary | out_data.trunc);
     if (out_data.rdstate() != out_data.goodbit)
     {
         throw new myException("Unable to open output file for writing.", ERROR);
@@ -23,7 +23,7 @@ binaryFile::binaryFile()
 binaryFile::binaryFile(EMP_REC records[], int linecount)
 {
     record_count = linecount;
-    out_data.open(out_fn, out_data.binary | out_data.trunc);
+    out_data.open(filename, out_data.binary | out_data.trunc);
     if (out_data.rdstate() != out_data.goodbit)
     {
         throw new myException("Unable to open output file for writing.", ERROR);
@@ -42,22 +42,43 @@ binaryFile::binaryFile(EMP_REC records[], int linecount)
 /************************* PUBLIC: DESTRUCTOR************************/
 binaryFile::~binaryFile()
 {
+    if (dept_headcount != nullptr)
+    {
+        delete [] dept_headcount;
+        dept_headcount = nullptr;
+    }
+    if (departments != nullptr)
+    {
+        delete [] departments;
+        departments = nullptr;
+    }
 
 }
 
 void binaryFile::sort()
 {
     int linecount = 0;
-    in_data.open(out_fn, in_data.binary);
+    in_data.open(filename, in_data.binary);
     if (in_data.rdstate() != in_data.goodbit)
     {
         throw new myException("Unable to open binary file for reading.", ERROR);
     }
-    int dept_headcount[dept_count] = {0};
+    if (dept_headcount != nullptr)
+    {
+        delete [] dept_headcount;
+        dept_headcount = nullptr;
+    }
+    dept_headcount = new int[dept_count];
+    dept_headcount = {0};
     EMP_REC *Employees_in = new EMP_REC[record_count];
     in_data.read((char*)&Employees_in, record_count*sizeof(EMP_REC));
     in_data.close();
-    bst departments[dept_count];
+    if (departments != nullptr)
+    {
+        delete [] departments;
+        departments = nullptr;
+    }
+    departments = new bst[dept_count];
     for (int counter = 0; counter < record_count; counter++)
     {
         if (!departments[Employees_in[counter].dept].insert_node(Employees_in[counter]))
@@ -65,11 +86,36 @@ void binaryFile::sort()
             throw new myException("Problem inserting a node into a bst.", ERROR);
         }
     }
-    out_data.open(out_fn, out_data.binary|out_data.trunc);
+    out_data.open(filename, out_data.binary|out_data.trunc);
     for (int counter = 0; counter < dept_count; counter++)
     {
         out_data.write((char*)departments[counter].bin_out_tree(), dept_headcount[counter]*sizeof(EMP_REC));
     }
     out_data.close();
     delete [] Employees_in;
+}
+
+
+//-=-=-=-=- Public: binaryFile::searchBinary -=-=-=-
+/* Name: binaryFile::searchBinary
+* Last worked on by: Erik Jepsen <erik.jepsen@trojans.dsu.edu>
+* Purpose: Search for an employee by department and employee number
+* Arguments: 2
+* int dept -- Department number
+* int emp_num -- Employee number
+* Returns: bool
+* True -- Employee was found with the provided search keys.
+* False -- Employee was not found.
+*/
+bool binaryFile::searchBinary(int dept, int emp_num)
+{
+    bool return_value = false;
+    if (departments == nullptr)
+        return return_value;
+    if (dept < 0)
+        return return_value;
+    if (dept >= dept_count)
+        return return_value;
+    return_value = departments[dept].find_node(emp_num);
+    return return_value;
 }

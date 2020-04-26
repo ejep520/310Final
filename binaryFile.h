@@ -33,9 +33,11 @@ class binaryFile {
     //private fields
     ifstream in_data;
     ofstream out_data;
-    const string out_fn = "output.bin";
+    const string filename = "output.bin";
     int record_count = 0;
     int dept_count = 0;
+    int *dept_headcount = nullptr;
+    bst *departments = nullptr;
     //private methods
     int p_searchBinary(int, int);//private method using employee number and department. Still needs a return (offset within the file)
     void p_updateEmployee(EMP_REC); //private method to update employee information. Takes a struct to update info.
