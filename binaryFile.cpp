@@ -81,7 +81,7 @@ void binaryFile::sort()
     departments = new bst[dept_count];
     for (int counter = 0; counter < record_count; counter++)
     {
-        if (!departments[Employees_in[counter].dept].insert_node(Employees_in[counter]))
+        if (!departments[Employees_in[counter].dept].insert(Employees_in[counter]))
         {
             throw new myException("Problem inserting a node into a bst.", ERROR);
         }
@@ -116,6 +116,16 @@ bool binaryFile::searchBinary(int dept, int emp_num)
         return return_value;
     if (dept >= dept_count)
         return return_value;
-    return_value = departments[dept].find_node(emp_num);
+    return_value = departments[dept].search(emp_num);
     return return_value;
+}
+
+EMP_REC *binaryFile::retrieveEmployee(int dept, int emp_num)
+{
+    if (!searchBinary(dept, emp_num))
+    {
+        return nullptr;
+    }
+    EMP_REC *return_val = p_retrieve_employee(dept, emp_num);
+    return return_val;
 }

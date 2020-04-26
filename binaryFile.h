@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include "bst.h"
+#include "bstNode.h"
 #include "customErrorClass.h"
 
 
