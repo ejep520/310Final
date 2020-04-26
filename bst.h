@@ -56,11 +56,9 @@ class bst {
     // Internally used by corresponding public function 
     // So, these are private
     bstNode* insert(int data, int employeeNumber,bstNode* r);
-    bstNode* remove(int data, int employeeNumber, bstNode* r);
+    bstNode* remove(int employeeNumber, bstNode* r);
     void inOrder(bstNode* r, void (*visit)(int));
-    bool search(bstNode* r, int data, int employeeNumber);
-    //int getNodeCount(bstNode* r);
-    //int getHeight(bstNode* r);
+    bool search(bstNode* r, int employeeNumber);
     void deleteTree(bstNode* r);
     bstNode*	findSuccessor(bstNode*);
 
@@ -68,17 +66,15 @@ class bst {
     bst();
     virtual ~bst();
 
-    // Member functions used by client program 
+    // Member functions 
     // Check the difference between public and corresponding private function call in terms of their signatures
     void insert(int data, int employeeNumber) { root = insert(data, employeeNumber, root); }
-    void remove(int data, int employeeNumber) { root = remove(data, employeeNumber, root); }
-    bool search(int data, int employeeNumber) { return search(root, employeeNumber, data); }
+    void remove(int employeeNumber) { root = remove(employeeNumber, root); }
+    bool search(int employeeNumber) { return search(root, employeeNumber); }
     
     // Tree Traversal
     void inOrder( void (*visit)(int) ) { inOrder(root, visit); }
 
-    //int getNodeCount() { return getNodeCount(root); }
-    //int getHeight() { return getHeight(root); }
 };
 
 #endif	/* _BST_H_ */

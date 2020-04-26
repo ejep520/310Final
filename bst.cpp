@@ -49,28 +49,28 @@ bstNode* bst::insert(int data, int empNumber, bstNode* rt) {
 }
 
 //Note: the return type is the node pointer
-bstNode* bst::remove(int data, int empNumber, bstNode* rt) {
+bstNode* bst::remove(int empNumber, bstNode* rt) {
   if (rt == NULL)
     return rt; // data not found. Do nothing.
-  if (data < rt->data)
-    rt->left = remove(data, empNumber, rt->left);
-  else if (data > rt->data)
-    rt->right = remove(data, empNumber, rt->right);
+  if (empNumber < rt->employeeNumber)
+    rt->left = remove(empNumber, rt->left);
+  else if (empNumber > rt->employeeNumber)
+    rt->right = remove(empNumber, rt->right);
 
   // now, 'rt' holds 'data' to be removed
   else if (rt->left !=NULL && rt->right != NULL)
   {
     // Two children exist
     // step1: findSuccessor is to find the successor node
-    double minData = findSuccessor(rt->right)->data;
+    int minData = findSuccessor(rt->right)->employeeNumber;
 
     // step2: replace the data
-    rt->data = minData;
+    rt->employeeNumber = minData;
 
     // step3: remove the successor node by using recursion
     //        passing rt->right as the tree root
     //        so that the successor node can be deleted
-    rt->right = remove(minData, empNumber, rt->right);
+    rt->right = remove(minData, rt->right);
   }
   else {
     // only one child exists or no children
@@ -100,34 +100,16 @@ void bst::inOrder(bstNode* rt, void (*visit)(int)) {
   }
 }
 
-// private: search data in the BST with rt as root
-bool bst::search(bstNode* rt, int data, int empNumber) {
+// private: search for employeeNumber in the BST with rt as root
+bool bst::search(bstNode* rt, int empNumber) {
   if (rt == NULL) return false;
-  else if (rt->data == data) return true;
-  else if (data < rt->data)
-    return search(rt->left, data, empNumber);
+  else if (rt->employeeNumber == empNumber) return true; //need to return int data (offset number) here.
+  else if (empNumber < rt->employeeNumber)
+    return search(rt->left, empNumber);
   else
-    return search(rt->right, data, empNumber);
+    return search(rt->right, empNumber);
 }
 
-/**********************NOT NEEDED*************************
-int bst::getNodeCount(bstNode* rt) {
-  if (rt == 0) return 0;
-  return getNodeCount(rt->left) + getNodeCount(rt->right) + 1;
-}
-*/
-
-/**********************NOT NEEDED*************************
-int bst::getHeight(bstNode* rt) {
-  if (rt == NULL) return 0;
-  else if (rt->left == NULL && rt->right == NULL) return 1;
-  else {
-    int rh = getHeight(rt->right);
-    int lh = getHeight(rt->left);
-    return rh > lh ? rh+1 : lh+1;
-  }
-}
-*/
 
 //findSuccessor is written as a recursive function to practice recursion
 //You can change this function with a loop, making it iterative
