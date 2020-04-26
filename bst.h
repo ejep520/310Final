@@ -55,10 +55,10 @@ class bst {
 
     // Internally used by corresponding public function 
     // So, these are private
-    bstNode* insert(int data, bstNode* r);
-    bstNode* remove(int data, bstNode* r);
+    bstNode* insert(int data, int employeeNumber,bstNode* r);
+    bstNode* remove(int data, int employeeNumber, bstNode* r);
     void inOrder(bstNode* r, void (*visit)(int));
-    bool search(bstNode* r, int data);
+    bool search(bstNode* r, int data, int employeeNumber);
     //int getNodeCount(bstNode* r);
     //int getHeight(bstNode* r);
     void deleteTree(bstNode* r);
@@ -70,9 +70,9 @@ class bst {
 
     // Member functions used by client program 
     // Check the difference between public and corresponding private function call in terms of their signatures
-    void insert(int data) { root = insert(data, root); }
-    void remove(int data) { root = remove(data, root); }
-    bool search(int data) { return search(root, data); }
+    void insert(int data, int employeeNumber) { root = insert(data, employeeNumber, root); }
+    void remove(int data, int employeeNumber) { root = remove(data, employeeNumber, root); }
+    bool search(int data, int employeeNumber) { return search(root, employeeNumber, data); }
     
     // Tree Traversal
     void inOrder( void (*visit)(int) ) { inOrder(root, visit); }

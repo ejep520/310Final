@@ -8,8 +8,9 @@ class bstNode {
     bstNode* right; // pointer to right child
     bstNode* left; // pointer to left child
     int data;
+    int employeeNumber; //employee number
   public:
-    bstNode(int data);
+    bstNode(int, int);
     virtual ~bstNode();
 
     friend class bst;

@@ -28,16 +28,16 @@ void bst::deleteTree(bstNode* rt) {
 }
 
 //Note: the return type is the node pointer
-bstNode* bst::insert(int data, bstNode* rt) {
+bstNode* bst::insert(int data, int empNumber, bstNode* rt) {
   try {
     if (rt == NULL) {
-      rt = new bstNode(data);
+      rt = new bstNode(data, empNumber);
     } 
     else if (data < rt->data) {
-      rt->left = insert(data, rt->left);
+      rt->left = insert(data, empNumber, rt->left);
     } 
     else if (data > rt->data)
-      rt->right = insert(data, rt->right);
+      rt->right = insert(data, empNumber, rt->right);
 
     // else already exists. Ignore or Update counter.
 
@@ -49,13 +49,13 @@ bstNode* bst::insert(int data, bstNode* rt) {
 }
 
 //Note: the return type is the node pointer
-bstNode* bst::remove(int data, bstNode* rt) {
+bstNode* bst::remove(int data, int empNumber, bstNode* rt) {
   if (rt == NULL)
     return rt; // data not found. Do nothing.
   if (data < rt->data)
-    rt->left = remove(data, rt->left);
+    rt->left = remove(data, empNumber, rt->left);
   else if (data > rt->data)
-    rt->right = remove(data, rt->right);
+    rt->right = remove(data, empNumber, rt->right);
 
   // now, 'rt' holds 'data' to be removed
   else if (rt->left !=NULL && rt->right != NULL)
@@ -70,7 +70,7 @@ bstNode* bst::remove(int data, bstNode* rt) {
     // step3: remove the successor node by using recursion
     //        passing rt->right as the tree root
     //        so that the successor node can be deleted
-    rt->right = remove(minData, rt->right);
+    rt->right = remove(minData, empNumber, rt->right);
   }
   else {
     // only one child exists or no children
@@ -101,13 +101,13 @@ void bst::inOrder(bstNode* rt, void (*visit)(int)) {
 }
 
 // private: search data in the BST with rt as root
-bool bst::search(bstNode* rt, int data) {
+bool bst::search(bstNode* rt, int data, int empNumber) {
   if (rt == NULL) return false;
   else if (rt->data == data) return true;
   else if (data < rt->data)
-    return search(rt->left, data);
+    return search(rt->left, data, empNumber);
   else
-    return search(rt->right, data);
+    return search(rt->right, data, empNumber);
 }
 
 /**********************NOT NEEDED*************************
