@@ -23,7 +23,17 @@ void binaryFile::import_employees(EMP_REC records[], int linecount)
         {
             dept_count = records[counter].dept + 1;
         }
-        out_data.write((const char*)&records[counter], 40);
+        try
+        {
+            out_data.write((const char*)&records[counter], 40);
+        }
+        catch( myException &e)
+        {
+            cout << "Failed to write to binary file: ";
+            cout << e.what() << endl;
+        }
+        
+        
     }
     out_data.close();
 }

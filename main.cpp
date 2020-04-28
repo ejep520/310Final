@@ -33,8 +33,7 @@ int main(int argc, char * argv[])
     in_data.open(in_fn);
     if (in_data.rdstate() != 0)
     {
-        cout<<"There was a problem opening "<<in_fn<<endl;
-        return 1;
+        throw new myException("Problem opening file", SYSTEM_FAILURE);
     }
     while (getline(in_data, this_line))
     {
@@ -50,7 +49,18 @@ int main(int argc, char * argv[])
         in_data >> temp_char;
         in_data >> Employees[counter].enumber;
         in_data >> temp_char;
-        in_data >> Employees[counter].e_name;
+
+        try
+        {
+            in_data >> Employees[counter].e_name;
+        }
+        catch( logic_error &e)
+        {
+            cout << "Employee name exceeds 30 characters: ";
+            cout << e.what() << endl;
+        }
+        
+        
     }
     in_data.close();
     binaryFile this_binary;
