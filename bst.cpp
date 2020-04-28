@@ -92,6 +92,7 @@ bstNode* bst::remove(int empNumber, bstNode* rt) {
   return rt;
 }
 
+//traversal
 void bst::inOrder(bstNode* rt, void (*visit)(int)) {
   if (rt != 0) {
     inOrder(rt->left, visit);
@@ -103,16 +104,30 @@ void bst::inOrder(bstNode* rt, void (*visit)(int)) {
 // private: search for employeeNumber in the BST with rt as root
 bool bst::search(bstNode* rt, int empNumber) {
   if (rt == NULL) return false;
-  else if (rt->employeeNumber == empNumber) return true; //need to return int data (offset number) here.
+  else if (rt->employeeNumber == empNumber) return true;
   else if (empNumber < rt->employeeNumber)
     return search(rt->left, empNumber);
   else
     return search(rt->right, empNumber);
 }
 
+//private: after searching for employeeNumber in the BST to return bool if employee exists,
+//this function will return the offset int for the employee node.
+int bst::returnOffset(bstNode* rt, int empNumber) {
+  if (rt == NULL) return false;
+  else if (rt->employeeNumber == empNumber) 
+    {
+      int returnOffset = 0;
+      returnOffset = rt->data;
+      return returnOffset;
+    }
+  else if (empNumber < rt->employeeNumber)
+    return search(rt->left, empNumber);
+  else
+    return search(rt->right, empNumber);
+}
 
-//findSuccessor is written as a recursive function to practice recursion
-//You can change this function with a loop, making it iterative
+//findSuccessor is written as a recursive function
 //Note: the return type is a node pointer
 bstNode* bst::findSuccessor(bstNode* rt) {
   if (rt->left == NULL)

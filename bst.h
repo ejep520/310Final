@@ -48,17 +48,17 @@ class bst
 
 #include "bstNode.h"
 
-// Binary Search Tree for "double" data
+// Binary Search Tree for int data
 class bst {
   private:
     bstNode* root;
 
-    // Internally used by corresponding public function 
-    // So, these are private
+    //private member functions
     bstNode* insert(int data, int employeeNumber,bstNode* r);
     bstNode* remove(int employeeNumber, bstNode* r);
     void inOrder(bstNode* r, void (*visit)(int));
     bool search(bstNode* r, int employeeNumber);
+    int returnOffset(bstNode* r,int employeeNumber);
     void deleteTree(bstNode* r);
     bstNode*	findSuccessor(bstNode*);
 
@@ -66,11 +66,11 @@ class bst {
     bst();
     virtual ~bst();
 
-    // Member functions 
-    // Check the difference between public and corresponding private function call in terms of their signatures
+    //public member functions
     void insert(int data, int employeeNumber) { root = insert(data, employeeNumber, root); }
     void remove(int employeeNumber) { root = remove(employeeNumber, root); }
     bool search(int employeeNumber) { return search(root, employeeNumber); }
+    int returnOffset(int employeeNumber) {return returnOffset(root, employeeNumber); }
     
     // Tree Traversal
     void inOrder( void (*visit)(int) ) { inOrder(root, visit); }
