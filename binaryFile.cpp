@@ -143,3 +143,25 @@ EMP_REC *binaryFile::retrieveEmployee(int dept, int emp_num)
     };
     return return_val;
 }
+
+bool binaryFile::updateEmployee(EMP_REC new_rec)
+{
+    bool return_value = false;
+    if (new_rec.dept < 0)
+        return return_value;
+    if (new_rec.dept > 4)
+        return return_value;
+    if (!searchBinary(new_rec.dept, new_rec.enumber))
+        return return_value;
+    int offset = p_retrieve_employee(new_rec.dept, new_rec.enumber);
+    if (out_data.is_open())
+        out_data.close();
+    out_data.open(filename, out_data.binary);
+    if (out_data.rdstate != out_data.goodbit)
+        throw new myException("Unable to open binary file for writing.", ERROR);
+    out_data.seekp(offset*sizeof(EMP_REC), out_data.beg);
+    out_data.write((char*)&new_rec, sizeof(EMP_REC));
+    out_data.close();
+    return_value = true;
+    return return_value;
+}
