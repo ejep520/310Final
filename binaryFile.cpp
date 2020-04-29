@@ -1,9 +1,9 @@
 #include "binaryFile.h"
 
-//-=-=-=-=- Public: Constructor -=-=-=-
-/* Name: Constructor
+//-=-=-=-=- Public: import_employees -=-=-=-
+/* Name: import_employees
 * Last worked on by: Erik Jepsen <erik.jepsen@trojans.dsu.edu>
-* Purpose: Create an instance
+* Purpose: Move an array of employee records into a binary file.
 * Arguments: 2
 * EMP_REC[] records -- An array of records read in
 * int linecount -- The number of records in records.
@@ -23,7 +23,7 @@ void binaryFile::import_employees(EMP_REC records[], int linecount)
         {
             dept_count = records[counter].dept + 1;
         }
-        out_data.write((const char*)&records[counter], sizeof(EMP_REC));
+        out_data.write((const char*)&records[counter], 40);
     }
     out_data.close();
 }
@@ -60,7 +60,8 @@ void binaryFile::sort()
     dept_headcount = new int[dept_count];
     dept_headcount = {0};
     EMP_REC *Employees_in = new EMP_REC[record_count];
-    in_data.read((char*)&Employees_in, record_count*sizeof(EMP_REC));
+    for (int counter = 0; counter < record_count; counter++)
+        in_data.read((char*)&Employees_in[counter], sizeof(EMP_REC));
     in_data.close();
     if (departments != nullptr)
     {
@@ -70,12 +71,13 @@ void binaryFile::sort()
     departments = new bst[dept_count];
     for (int counter = 0; counter < record_count; counter++)
     {
-        // departments[Employees_in[counter].dept];
+        departments[Employees_in[counter].dept].insert(counter, Employees_in[counter].enumber);
+        cout<<"Checkpoint "<<counter<<"."<<endl;
     }
     out_data.open(filename, out_data.binary|out_data.trunc);
     for (int counter = 0; counter < dept_count; counter++)
     {
-        // out_data.write((char*)departments[counter].bin_out_tree(), dept_headcount[counter]*sizeof(EMP_REC));
+        // ToDo: Write the binary file back out in dept/enumber order.
     }
     out_data.close();
     delete [] Employees_in;

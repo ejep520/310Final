@@ -30,4 +30,5 @@ clean:
 	@if [ -a binaryFile.o ]; then rm -v binaryFile.o; fi;
 	@if [ -a bst.o ]; then rm -v bst.o; fi;
 	@if [ -a bstNode.o ]; then rm -v bstNode.o; fi;
-	@if [ -a customErrorClass.o ]; then rm -v customErrorClass; fi;
+	@if [ -a customErrorClass.o ]; then rm -v customErrorClass.o; fi;
+	@if [ -a output.bin ]; then rm -v output.bin; fi;
