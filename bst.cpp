@@ -53,10 +53,10 @@ bstNode* bst::insert(int data, int empNumber, bstNode* rt) {
     if (rt == NULL) {
       rt = new bstNode(data, empNumber);
     } 
-    else if (data < rt->data) {
+    else if (empNumber < rt->employeeNumber) {
       rt->left = insert(data, empNumber, rt->left);
     } 
-    else if (data > rt->data)
+    else if (empNumber > rt->employeeNumber)
       rt->right = insert(data, empNumber, rt->right);
 
     // else already exists. Ignore or Update counter.
@@ -171,7 +171,7 @@ bool bst::search(bstNode* rt, int empNumber) {
 */
 
 int bst::returnOffset(bstNode* rt, int empNumber) {
-  if (rt == NULL) return false;
+  if (rt == NULL) return -1;
   else if (rt->employeeNumber == empNumber) 
     {
       int returnOffset = 0;
@@ -179,9 +179,9 @@ int bst::returnOffset(bstNode* rt, int empNumber) {
       return returnOffset;
     }
   else if (empNumber < rt->employeeNumber)
-    return search(rt->left, empNumber);
+    return returnOffset(rt->left, empNumber);
   else
-    return search(rt->right, empNumber);
+    return returnOffset(rt->right, empNumber);
 }
 
 //-=-=-=-=- Private: bst::findSuccessor -=-=-=-

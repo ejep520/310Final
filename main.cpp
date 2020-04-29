@@ -62,10 +62,22 @@ int main(int argc, char * argv[])
     for (counter = 0; counter < 10; counter++)
     {
         real_data = this_binary.retrieveEmployee(test_data[counter].dept, test_data[counter].enumber);
-        if ((counter > 5) ^ (real_data->e_name == test_data[counter].e_name))
-            cout<<"Test "<<counter<<" of 10 passed."<<endl;
+        if ((counter > 4) ^ (strcmp(real_data->e_name, test_data[counter].e_name)== 0))
+        {
+            cout<<"Test "<<counter+1<<" of 10 passed."<<endl;
+            cout<<"Results..."<<endl;
+            cout<<"Department "<<real_data->dept<<" == "<<test_data[counter].dept<<endl;
+            cout<<"Number "<<real_data->enumber<<" == "<<test_data[counter].enumber<<endl;
+            cout<<"Name "<<real_data->e_name<<" == "<<test_data[counter].e_name<<endl;
+        }
         else
-            cout<<"Test "<<counter<<" of 10 failed."<<endl;
+        {
+            cout<<"Test "<<counter+1<<" of 10 failed."<<endl;
+            cout<<"Results..."<<endl;
+            cout<<"Department "<<real_data->dept<<" == "<<test_data[counter].dept<<endl;
+            cout<<"Number "<<real_data->enumber<<" == "<<test_data[counter].enumber<<endl;
+            cout<<"Name "<<real_data->e_name<<" != "<<test_data[counter].e_name<<endl;
+        }
     }
     return 0;
 }

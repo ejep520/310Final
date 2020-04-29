@@ -70,16 +70,15 @@ void binaryFile::sort()
     }
     departments = new bst[dept_count];
     for (int counter = 0; counter < record_count; counter++)
-    {
-        departments[Employees_in[counter].dept].insert(counter, Employees_in[counter].enumber);
-        cout<<"Checkpoint "<<counter<<"."<<endl;
-    }
-    out_data.open(filename, out_data.binary|out_data.trunc);
-    for (int counter = 0; counter < dept_count; counter++)
-    {
+        {
+            departments[Employees_in[counter].dept].insert(counter, Employees_in[counter].enumber);
+        }
+    // out_data.open(filename, out_data.binary|out_data.trunc);
+    // for (int counter = 0; counter < dept_count; counter++)
+    // {
         // ToDo: Write the binary file back out in dept/enumber order.
-    }
-    out_data.close();
+    // }
+    // out_data.close();
     delete [] Employees_in;
 }
 
@@ -114,7 +113,13 @@ EMP_REC *binaryFile::retrieveEmployee(int dept, int emp_num)
     {
         return nullptr;
     }
+    EMP_REC *return_val = new EMP_REC;
     int offset = p_searchBinary(dept, emp_num);
+    if (offset < 0)
+        {
+            cout<<"Offset = "<<offset<<endl;
+            return return_val;
+        }
     if (in_data.is_open())
         in_data.close();
     in_data.open(filename, in_data.binary);
@@ -123,15 +128,8 @@ EMP_REC *binaryFile::retrieveEmployee(int dept, int emp_num)
         throw new myException("Unable to open binary file for reading.", ERROR);
     }
     in_data.seekg(offset*sizeof(EMP_REC), in_data.beg);
-    int deptNo, empNo;
-    string inName;
-    in_data>>deptNo>>empNo>>inName;
+    in_data.read((char*)return_val, sizeof(EMP_REC));
     in_data.close();
-    EMP_REC *return_val = new EMP_REC;
-    return_val->dept = deptNo;
-    return_val->enumber = empNo;
-    for (int counter = 0; counter < 30; counter++)
-        return_val->e_name[counter] = inName[counter];
     return return_val;
 }
 
