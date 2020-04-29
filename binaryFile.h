@@ -11,9 +11,9 @@ using namespace std;
 
 typedef struct e_rec
 {
-    int dept;
-    int enumber;
-    char e_name[30];
+    int dept = -1;
+    int enumber = -1;
+    char e_name[30] = "";
 }EMP_REC;
 
 class binaryFile{
