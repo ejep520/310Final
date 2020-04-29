@@ -10,10 +10,10 @@ class bstNode {
     int data;           // data for offset
     int employeeNumber; // employee number
   public:
-    bstNode(int, int);
-    virtual ~bstNode();
+    bstNode(int, int);  //constructor
+    virtual ~bstNode(); //destructor
 
-    friend class bst;
+    friend class bst;   //set friend class for private access
 };
 
 #endif	/* _BSTNODE_H_ */

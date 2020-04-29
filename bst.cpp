@@ -5,18 +5,28 @@ using namespace std;
 
 #include "bst.h"
 
+/************************* PUBLIC: CONSTRUCTOR*************************/
 bst::bst() {
-  //check the NULL root first. otherwise delete will cause a segmentation fault
- // if (root != NULL) 
- //   deleteTree(root);
-
-  //The line below is critical to make root non-dangling pointer
   root = NULL;
 }
 
+/************************* PRIVATE: DESTRUCTOR*************************/
 bst::~bst() {
+  
+  //check the NULL root first. otherwise delete will cause a segmentation fault
+  if (root != NULL) 
+    deleteTree(root);
 
 }
+
+//-=-=-=-=- Private: bst::deleteTree -=-=-=-
+/* Name: binaryFile::deleteTree
+* Last worked on by: Justin Gyolai <justin.gyolai@trojans.dsu.edu>
+* Purpose: delete a tree and it's pointers at the root.
+* Arguments: 1
+* bstNode root -- the root node of the tree
+* Returns: N/A
+*/
 
 //Note: deleteTree calls deleteTree by passing left and right pointers, respectively.
 void bst::deleteTree(bstNode* rt) {
@@ -27,7 +37,17 @@ void bst::deleteTree(bstNode* rt) {
   }
 }
 
-//Note: the return type is the node pointer
+//-=-=-=-=- Private: bst::insert -=-=-=-
+/* Name: binaryFile::insert
+* Last worked on by: Justin Gyolai <justin.gyolai@trojans.dsu.edu>
+* Purpose: insert a node into the tree.
+* Arguments: 3
+* int data -- the offset
+* int empNumber -- the employee number
+* bstNode root -- the root node of the tree
+* Returns: 1
+* bstNode*: node pointer
+*/
 bstNode* bst::insert(int data, int empNumber, bstNode* rt) {
   try {
     if (rt == NULL) {
@@ -48,6 +68,16 @@ bstNode* bst::insert(int data, int empNumber, bstNode* rt) {
   }
 }
 
+//-=-=-=-=- Private: bst::remove -=-=-=-
+/* Name: binaryFile::remove
+* Last worked on by: Justin Gyolai <justin.gyolai@trojans.dsu.edu>
+* Purpose: remove node from tree.
+* Arguments: 2
+* int empNumber -- the employee number
+* bstNode root -- the root node of the tree
+* Returns: 1
+* bstNode*: node pointer
+*/
 //Note: the return type is the node pointer
 bstNode* bst::remove(int empNumber, bstNode* rt) {
   if (rt == NULL)
@@ -92,7 +122,14 @@ bstNode* bst::remove(int empNumber, bstNode* rt) {
   return rt;
 }
 
-//traversal
+//-=-=-=-=- Private: bst::inOrder -=-=-=-
+/* Name: binaryFile::inOrder
+* Last worked on by: Justin Gyolai <justin.gyolai@trojans.dsu.edu>
+* Purpose: inorder traversal through the bst.
+* Arguments: 1
+* bstNode root -- the root node of the tree
+* Returns: N/A
+*/
 void bst::inOrder(bstNode* rt, void (*visit)(int)) {
   if (rt != 0) {
     inOrder(rt->left, visit);
@@ -101,7 +138,18 @@ void bst::inOrder(bstNode* rt, void (*visit)(int)) {
   }
 }
 
-// private: search for employeeNumber in the BST with rt as root
+//-=-=-=-=- Private: bst::search -=-=-=-
+/* Name: binaryFile::search
+* Last worked on by: Justin Gyolai <justin.gyolai@trojans.dsu.edu>
+* Purpose: to return whether or not an employee number is found in the tree.
+* Arguments: 2
+* bstNode root -- the root node of the tree
+* int empNumber -- the employee number
+* Returns: bool
+* true: returns when employee number is found
+* false: returns when tree is empty/employee number isn't found
+*/
+
 bool bst::search(bstNode* rt, int empNumber) {
   if (rt == NULL) return false;
   else if (rt->employeeNumber == empNumber) return true;
@@ -111,8 +159,17 @@ bool bst::search(bstNode* rt, int empNumber) {
     return search(rt->right, empNumber);
 }
 
-//private: after searching for employeeNumber in the BST to return bool if employee exists,
-//this function will return the offset int for the employee node.
+//-=-=-=-=- Private: bst::returnOffset -=-=-=-
+/* Name: binaryFile::returnOffset
+* Last worked on by: Justin Gyolai <justin.gyolai@trojans.dsu.edu>
+* Purpose: searches tree by employee number then returns the node's offset if found.
+* Arguments: 2
+* int empNumber -- the employee number
+* bstNode root -- the root node of the tree
+* Returns: int
+* int: offset of node if found.
+*/
+
 int bst::returnOffset(bstNode* rt, int empNumber) {
   if (rt == NULL) return false;
   else if (rt->employeeNumber == empNumber) 
@@ -127,8 +184,16 @@ int bst::returnOffset(bstNode* rt, int empNumber) {
     return search(rt->right, empNumber);
 }
 
-//findSuccessor is written as a recursive function
-//Note: the return type is a node pointer
+//-=-=-=-=- Private: bst::findSuccessor -=-=-=-
+/* Name: binaryFile::findSuccessor
+* Last worked on by: Justin Gyolai <justin.gyolai@trojans.dsu.edu>
+* Purpose: recursive function to find the successor node.
+* Arguments: 1
+* bstNode root -- the root node of the tree
+* Returns: bstNode*
+* bstNode*: node pointer to successor node
+*/
+
 bstNode* bst::findSuccessor(bstNode* rt) {
   if (rt->left == NULL)
     return rt;
