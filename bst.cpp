@@ -7,8 +7,8 @@ using namespace std;
 
 bst::bst() {
   //check the NULL root first. otherwise delete will cause a segmentation fault
-  if (root != NULL) 
-    deleteTree(root);
+ // if (root != NULL) 
+ //   deleteTree(root);
 
   //The line below is critical to make root non-dangling pointer
   root = NULL;
