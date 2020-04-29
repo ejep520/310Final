@@ -1,16 +1,5 @@
 #include "binaryFile.h"
 
-/************************* PUBLIC: CONSTRUCTOR*************************/
-binaryFile::binaryFile()
-{
-    out_data.open(filename, out_data.binary | out_data.trunc);
-    if (out_data.rdstate() != out_data.goodbit)
-    {
-        throw new myException("Unable to open output file for writing.", ERROR);
-    }
-    out_data.close();
-}
-
 //-=-=-=-=- Public: Constructor -=-=-=-
 /* Name: Constructor
 * Last worked on by: Erik Jepsen <erik.jepsen@trojans.dsu.edu>
@@ -20,7 +9,7 @@ binaryFile::binaryFile()
 * int linecount -- The number of records in records.
 * Returns: NA
 */
-binaryFile::binaryFile(EMP_REC records[], int linecount)
+void binaryFile::import_employees(EMP_REC records[], int linecount)
 {
     record_count = linecount;
     out_data.open(filename, out_data.binary | out_data.trunc);
@@ -113,7 +102,7 @@ bool binaryFile::searchBinary(int dept, int emp_num)
         return return_value;
     if (dept >= dept_count)
         return return_value;
-    //return_value = departments[dept].search(emp_num); // Awaiting a pull that mods bst.h and makes this correct.
+    return_value = departments[dept].search(emp_num) >= 0; // Awaiting a pull that mods bst.h and makes this correct.
     return return_value;
 }
 
@@ -123,7 +112,7 @@ EMP_REC *binaryFile::retrieveEmployee(int dept, int emp_num)
     {
         return nullptr;
     }
-    int offset = p_retrieve_employee(dept, emp_num);
+    int offset = p_searchBinary(dept, emp_num);
     if (in_data.is_open())
         in_data.close();
     in_data.open(filename, in_data.binary);
@@ -133,14 +122,14 @@ EMP_REC *binaryFile::retrieveEmployee(int dept, int emp_num)
     }
     in_data.seekg(offset*sizeof(EMP_REC), in_data.beg);
     int deptNo, empNo;
-    char inName[30];
+    string inName;
     in_data>>deptNo>>empNo>>inName;
     in_data.close();
-    EMP_REC *return_val = new EMP_REC{
-        .dept = deptNo,
-        .enumber = empNo,
-        .name = *inName
-    };
+    EMP_REC *return_val = new EMP_REC;
+    return_val->dept = deptNo;
+    return_val->enumber = empNo;
+    for (int counter = 0; counter < 30; counter++)
+        return_val->e_name[counter] = inName[counter];
     return return_val;
 }
 
@@ -151,17 +140,26 @@ bool binaryFile::updateEmployee(EMP_REC new_rec)
         return return_value;
     if (new_rec.dept > 4)
         return return_value;
-    if (!searchBinary(new_rec.dept, new_rec.enumber))
+    int offset = p_searchBinary(new_rec.dept, new_rec.enumber);
+    if (offset < 0)
         return return_value;
-    int offset = p_retrieve_employee(new_rec.dept, new_rec.enumber);
     if (out_data.is_open())
         out_data.close();
     out_data.open(filename, out_data.binary);
-    if (out_data.rdstate != out_data.goodbit)
+    if (out_data.rdstate() != out_data.goodbit)
         throw new myException("Unable to open binary file for writing.", ERROR);
     out_data.seekp(offset*sizeof(EMP_REC), out_data.beg);
     out_data.write((char*)&new_rec, sizeof(EMP_REC));
     out_data.close();
     return_value = true;
+    return return_value;
+}
+
+int binaryFile::p_searchBinary(int dept_no, int emp_no)
+{
+    int return_value = -1;
+    int could_be = departments[dept_no].returnOffset(emp_no);
+    if (could_be >= 0)
+        return_value = could_be;
     return return_value;
 }

@@ -4,10 +4,10 @@
 using namespace std;
 
 #include "bst.h"
-
+/*
 bst::bst() {
   root = NULL;
-}
+} */
 
 bst::bst() {
   //check the NULL root first. otherwise delete will cause a segmentation fault
