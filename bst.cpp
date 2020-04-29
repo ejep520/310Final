@@ -4,10 +4,6 @@
 using namespace std;
 
 #include "bst.h"
-/*
-bst::bst() {
-  root = NULL;
-} */
 
 bst::bst() {
   //check the NULL root first. otherwise delete will cause a segmentation fault
@@ -16,6 +12,10 @@ bst::bst() {
 
   //The line below is critical to make root non-dangling pointer
   root = NULL;
+}
+
+bst::~bst() {
+
 }
 
 //Note: deleteTree calls deleteTree by passing left and right pointers, respectively.
