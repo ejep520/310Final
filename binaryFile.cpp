@@ -1,4 +1,7 @@
 #include "binaryFile.h"
+#include <vector>
+
+using namespace std;
 
 //-=-=-=-=- Public: import_employees -=-=-=-
 /* Name: import_employees
@@ -173,3 +176,5 @@ int binaryFile::p_searchBinary(int dept_no, int emp_no)
         return_value = could_be;
     return return_value;
 }
+
+//bstname.inOrder(&)

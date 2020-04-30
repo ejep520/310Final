@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <new>
+#include <vector>
 using namespace std;
 
 #include "bst.h"
@@ -130,13 +131,24 @@ bstNode* bst::remove(int empNumber, bstNode* rt) {
 * bstNode root -- the root node of the tree
 * Returns: N/A
 */
-void bst::inOrder(bstNode* rt, void (*visit)(int)) {
-  if (rt != 0) {
-    inOrder(rt->left, visit);
-    (*visit)(rt->data);
-    inOrder(rt->right, visit);
+vector<int> bst::inOrder(bstNode* rt) {
+  vector<int> offsetList;
+  if (rt = NULL) {
+    return offsetList;
+  }  
+  vector<int> data;
+  if(rt->left != NULL){
+    data = inOrder(rt->left);
+    offsetList.insert(offsetList.end(), data.begin(), data.end());
   }
-}
+  offsetList.push_back(rt->data);
+  if(rt->right != NULL){
+    data = inOrder(rt->right);
+    offsetList.insert(offsetList.end(),data.begin(), data.end());
+  }
+  return offsetList;
+  }
+
 
 //-=-=-=-=- Private: bst::search -=-=-=-
 /* Name: binaryFile::search
@@ -200,3 +212,11 @@ bstNode* bst::findSuccessor(bstNode* rt) {
   else
     return findSuccessor(rt->left);
 }
+
+/*
+vector<int> bst::storeOffset(int storedOffset) {
+  vector<int> offsetStorage;
+  offsetStorage.push_back(storedOffset);
+  return offsetStorage;
+}
+*/
