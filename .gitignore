@@ -33,5 +33,9 @@
 
 # Output
 excBinaryFile
-output.bin
+*.bin
 .vscode
+
+# Test data
+*.txt
+*.bak

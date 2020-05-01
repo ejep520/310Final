@@ -133,7 +133,7 @@ bstNode* bst::remove(int empNumber, bstNode* rt) {
 */
 vector<int> bst::inOrder(bstNode* rt) {
   vector<int> offsetList;
-  if (rt = NULL) {
+  if (rt == NULL) {
     return offsetList;
   }  
   vector<int> data;
@@ -184,13 +184,9 @@ bool bst::search(bstNode* rt, int empNumber) {
 
 int bst::returnOffset(bstNode* rt, int empNumber) {
   if (rt == NULL) return -1;
-  else if (rt->employeeNumber == empNumber) 
-    {
-      int returnOffset = 0;
-      returnOffset = rt->data;
-      return returnOffset;
-    }
-  else if (empNumber < rt->employeeNumber)
+  if (rt->employeeNumber == empNumber) 
+      return rt->data;
+  if (empNumber < rt->employeeNumber)
     return returnOffset(rt->left, empNumber);
   else
     return returnOffset(rt->right, empNumber);

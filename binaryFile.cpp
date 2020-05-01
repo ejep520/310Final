@@ -1,5 +1,4 @@
 #include "binaryFile.h"
-#include <vector>
 
 using namespace std;
 
@@ -59,7 +58,8 @@ binaryFile::~binaryFile()
 
 void binaryFile::sort()
 {
-    int linecount = 0;
+    if (in_data.is_open())
+        in_data.close();
     in_data.open(filename, in_data.binary);
     if (in_data.rdstate() != in_data.goodbit)
     {
@@ -72,27 +72,54 @@ void binaryFile::sort()
     }
     dept_headcount = new int[dept_count];
     dept_headcount = {0};
-    EMP_REC *Employees_in = new EMP_REC[record_count];
-    for (int counter = 0; counter < record_count; counter++)
-        in_data.read((char*)&Employees_in[counter], sizeof(EMP_REC));
-    in_data.close();
     if (departments != nullptr)
     {
         delete [] departments;
         departments = nullptr;
     }
     departments = new bst[dept_count];
+    EMP_REC Employee_in;
     for (int counter = 0; counter < record_count; counter++)
+    {
+        in_data.read((char*)&Employee_in, sizeof(EMP_REC));
+        departments[Employee_in.dept].insert(counter, Employee_in.enumber);
+    }
+    in_data.close();
+    vector<int> *new_order = new vector<int>[dept_count];
+    for (int counter = 0; counter < dept_count; counter++)
+        new_order[counter] = departments[counter].store();
+    const string new_file = "newout.bin";
+    ofstream new_out;
+    EMP_REC *xfer_container = nullptr;
+    new_out.open(new_file, new_out.binary | new_out.trunc);
+    int get_emp_offset = 0;
+    int inner_count = 0;
+    bst *new_departments = new bst[dept_count];
+    bst *old_departments = departments;
+    if (new_out.rdstate() != new_out.goodbit)
+    {
+        perror("Unable to open output file.");
+        throw new myException("Unable to open output file.", SYSTEM_FAILURE);
+    }
+    for (int counter = 0; counter < dept_count; counter++)
+    {
+        while (!new_order[counter].empty())
         {
-            departments[Employees_in[counter].dept].insert(counter, Employees_in[counter].enumber);
+            get_emp_offset = new_order[counter].front();
+            new_order[counter].erase(new_order[counter].begin());
+            xfer_container = retrieveEmployee(get_emp_offset);
+            new_out.write((char*)xfer_container, sizeof(EMP_REC));
+            new_departments[counter].insert(inner_count++, xfer_container->enumber);
+            delete xfer_container;
         }
-    // out_data.open(filename, out_data.binary|out_data.trunc);
-    // for (int counter = 0; counter < dept_count; counter++)
-    // {
-        // ToDo: Write the binary file back out in dept/enumber order.
-    // }
+    }
+    new_out.close();
+    remove(filename.c_str());
+    rename(new_file.c_str(), filename.c_str());
+    departments = new_departments;
     // out_data.close();
-    delete [] Employees_in;
+    delete [] new_order;
+    delete [] old_departments;
 }
 
 
@@ -126,45 +153,56 @@ EMP_REC *binaryFile::retrieveEmployee(int dept, int emp_num)
     {
         return nullptr;
     }
-    EMP_REC *return_val = new EMP_REC;
     int offset = p_searchBinary(dept, emp_num);
-    if (offset < 0)
-        {
-            cout<<"Offset = "<<offset<<endl;
-            return return_val;
-        }
+    return retrieveEmployee(offset);
+}
+EMP_REC *binaryFile::retrieveEmployee(int offset)
+{
+    EMP_REC *return_value = new EMP_REC;
     if (in_data.is_open())
         in_data.close();
     in_data.open(filename, in_data.binary);
     if (in_data.rdstate() != in_data.goodbit)
-    {
-        throw new myException("Unable to open binary file for reading.", ERROR);
-    }
+        throw new myException("Unable to open binary for reading.", SYSTEM_FAILURE);
     in_data.seekg(offset*sizeof(EMP_REC), in_data.beg);
-    in_data.read((char*)return_val, sizeof(EMP_REC));
+    in_data.read((char*)return_value, sizeof(EMP_REC));
     in_data.close();
-    return return_val;
+    return return_value;
 }
 
 bool binaryFile::updateEmployee(EMP_REC new_rec)
 {
     bool return_value = false;
+    EMP_REC *old_rec = nullptr;
+    fstream update_stream;
     if (new_rec.dept < 0)
         return return_value;
-    if (new_rec.dept > 4)
+    if (new_rec.dept >= dept_count)
         return return_value;
-    int offset = p_searchBinary(new_rec.dept, new_rec.enumber);
+    int offset = p_searchBinary(new_rec.enumber);
     if (offset < 0)
         return return_value;
-    if (out_data.is_open())
-        out_data.close();
-    out_data.open(filename, out_data.binary);
-    if (out_data.rdstate() != out_data.goodbit)
+    old_rec = retrieveEmployee(offset);
+    update_stream.open(filename, update_stream.binary|update_stream.in|update_stream.out);
+    if (update_stream.rdstate() != update_stream.goodbit)
         throw new myException("Unable to open binary file for writing.", ERROR);
-    out_data.seekp(offset*sizeof(EMP_REC), out_data.beg);
-    out_data.write((char*)&new_rec, sizeof(EMP_REC));
-    out_data.close();
+    update_stream.seekp(offset*sizeof(EMP_REC), out_data.beg);
+    update_stream.write((char*)&new_rec, sizeof(EMP_REC));
+    update_stream.close();
+    sort();
     return_value = true;
+    return return_value;
+}
+
+int binaryFile::p_searchBinary(int emp_no)
+{
+    int return_value = -1;
+    for (int counter = 0; counter < dept_count; counter++)
+    {
+        return_value = departments[counter].returnOffset(emp_no);
+        if (return_value >= 0)
+            break;
+    }
     return return_value;
 }
 
@@ -176,5 +214,3 @@ int binaryFile::p_searchBinary(int dept_no, int emp_no)
         return_value = could_be;
     return return_value;
 }
-
-//bstname.inOrder(&)

@@ -69,24 +69,36 @@ int main(int argc, char * argv[])
     this_binary.sort();
     EMP_REC *test_data = get_test_data(file_num);
     EMP_REC *real_data = nullptr;
+    cout<<"During the first run, tests 6-10 should fail."<<endl;
     for (counter = 0; counter < 10; counter++)
     {
         real_data = this_binary.retrieveEmployee(test_data[counter].dept, test_data[counter].enumber);
-        if ((counter > 4) ^ (strcmp(real_data->e_name, test_data[counter].e_name)== 0))
+        if (strcmp(real_data->e_name, test_data[counter].e_name)== 0)
         {
             cout<<"Test "<<counter+1<<" of 10 passed."<<endl;
-            cout<<"Results..."<<endl;
-            cout<<"Department "<<real_data->dept<<" == "<<test_data[counter].dept<<endl;
-            cout<<"Number "<<real_data->enumber<<" == "<<test_data[counter].enumber<<endl;
-            cout<<"Name "<<real_data->e_name<<" == "<<test_data[counter].e_name<<endl;
         }
         else
         {
             cout<<"Test "<<counter+1<<" of 10 failed."<<endl;
-            cout<<"Results..."<<endl;
-            cout<<"Department "<<real_data->dept<<" == "<<test_data[counter].dept<<endl;
-            cout<<"Number "<<real_data->enumber<<" == "<<test_data[counter].enumber<<endl;
-            cout<<"Name "<<real_data->e_name<<" != "<<test_data[counter].e_name<<endl;
+        }
+    }
+    cout<<"\"Updating\" the last five entries with the new, correct data."<<endl;
+    for (int counter = 5; counter < 10; counter++)
+    {
+        if (!this_binary.updateEmployee(test_data[counter]))
+            throw new myException("Unable to update a record!");
+    }
+    cout<<"Rerunning the final five tests."<<endl;
+    for (counter = 5; counter < 10; counter++)
+    {
+        real_data = this_binary.retrieveEmployee(test_data[counter].dept, test_data[counter].enumber);
+        if (strcmp(real_data->e_name, test_data[counter].e_name) == 0)
+        {
+            cout<<"Test "<<counter+1<<" of 10 passed."<<endl;
+        }
+        else
+        {
+            cout<<"Test "<<counter+1<<" of 10 failed."<<endl;
         }
     }
     return 0;

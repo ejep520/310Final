@@ -1,7 +1,9 @@
 #ifndef __BINARY_FILE__H__
 #define __BINARY_FILE__H__
+#include <cstring>
 #include <iostream>
 #include <fstream>
+#include <vector>
 #include "bst.h"
 #include "bstNode.h"
 #include "customErrorClass.h"
@@ -24,6 +26,7 @@ class binaryFile{
     void sort(void); //sorting function
     bool searchBinary(int, int); //public method using employee number and department.
     EMP_REC *retrieveEmployee(int, int); //public method that returns employee name, number, and department. 
+    EMP_REC *retrieveEmployee(int); // This int is the offset.
     void printEmployee(EMP_REC); //print name of employee from the retrieve employee function
     bool updateEmployee(EMP_REC); //update employee record
    
@@ -38,6 +41,7 @@ class binaryFile{
     bst *departments = nullptr;
     //private methods
     int p_searchBinary(int, int);//private method using employee number and department.
+    int p_searchBinary(int); //Looks thru all departments until it finds emp_num.
     int p_updateEmployee(EMP_REC); //private method to update employee information.
 };
 
