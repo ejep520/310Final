@@ -42,6 +42,7 @@ int main(int argc, char * argv[])
     in_data.clear();
     in_data.seekg(0, in_data.beg);
     EMP_REC *Employees = new EMP_REC[linecount];
+    string name_check = "";
     for (counter = 0; counter < linecount; counter++)
     {
         Employees[counter] = EMP_REC();
@@ -49,16 +50,13 @@ int main(int argc, char * argv[])
         in_data >> temp_char;
         in_data >> Employees[counter].enumber;
         in_data >> temp_char;
-
-        try
+        in_data >> name_check;
+        if (name_check.length() > 30)
         {
-            in_data >> Employees[counter].e_name;
+            cout << "Employee name "<<name_check<<" exceeds 30 characters."<<endl;
+            cout<<"This name will be truncated to the first 30 characters."<<endl;
         }
-        catch( logic_error &e)
-        {
-            cout << "Employee name exceeds 30 characters: ";
-            cout << e.what() << endl;
-        }
+        strncpy(Employees[counter].e_name, name_check.c_str(), 30);
         
         
     }
